@@ -1,0 +1,38 @@
+{
+  "project_name": "Your Project Name",
+  "project_type": "web app/mobile app/data analysis/research/etc",
+  "start_date": "2024-08-21",
+  "status": "current status",
+  "architecture": {
+    "frontend": "technology used",
+    "backend": "technology used", 
+    "database": "technology used",
+    "deployment": "hosting/deployment approach"
+  },
+  "key_decisions": {
+    "technology_choices": "rationale for tech stack",
+    "architecture_patterns": "design decisions made",
+    "important_tradeoffs": "decisions and why"
+  },
+  "current_progress": {
+    "completed_features": [],
+    "in_progress": [],
+    "next_priorities": []
+  },
+  "integration_points": {
+    "apis": "external services used",
+    "databases": "data connections", 
+    "third_party": "external integrations"
+  },
+  "testing_strategy": {
+    "approach": "testing methodology",
+    "coverage": "current test coverage",
+    "quality_gates": "quality requirements"
+  },
+  "deployment_info": {
+    "environments": "dev/staging/production setup",
+    "ci_cd": "continuous integration approach",
+    "monitoring": "observability strategy"
+  }
+}
+

@@ -37,8 +37,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Memory system overview and statistics
 
 - Setup & Installation
-  - Automated setup script (`setup.sh`)
-  - One-command installation process
+  - AI agent automated setup from templates
+  - Zero-command installation process
   - Directory structure creation
   - Template initialization
 

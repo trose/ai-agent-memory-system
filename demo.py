@@ -521,7 +521,7 @@ class MemorySystemDemo:
             print(f"{Colors.BOLD}{Colors.GREEN}Congratulations!{Colors.END}")
             print(f"{Colors.CYAN}You've experienced how persistent memory transforms AI collaboration.{Colors.END}")
             print(f"\n{Colors.YELLOW}Next steps:{Colors.END}")
-            print("  1. Run ./setup.sh to install the full system")
+            print("  1. Ask your AI agent to set up the memory system from the templates")
             print("  2. Customize templates for your specific projects") 
             print("  3. Start your first memory-enhanced AI session")
             print("  4. Watch your collaboration quality improve over time!")

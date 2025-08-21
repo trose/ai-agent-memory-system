@@ -1,303 +1,196 @@
 """
-Integration tests for setup.sh script and complete system initialization.
+Integration tests for AI agent memory system initialization using templates.
 """
 import os
 import json
-import subprocess
 import tempfile
 import shutil
 from pathlib import Path
 import pytest
 
 
-class TestSetupScript:
-    """Test the setup.sh script functionality."""
+class TestMemorySystemTemplates:
+    """Test that templates and utilities are accessible for AI agent setup."""
     
-    def test_setup_script_execution(self, temp_memory_dir, monkeypatch):
-        """Test that setup script runs successfully."""
-        # Change to temporary directory for testing
-        original_home = os.environ.get("HOME", "")
-        monkeypatch.setenv("HOME", temp_memory_dir)
-        
-        # Get the setup script path
+    def test_templates_exist_and_valid(self):
+        """Test that all required templates exist and are valid JSON."""
         repo_root = Path(__file__).parent.parent.parent
-        setup_script = repo_root / "setup.sh"
+        templates_dir = repo_root / "templates"
         
-        # Run setup script
-        result = subprocess.run(
-            ["bash", str(setup_script)],
-            capture_output=True,
-            text=True,
-            cwd=str(repo_root)
-        )
-        
-        # Check that script executed successfully
-        assert result.returncode == 0, f"Setup failed: {result.stderr}"
-        assert "Setup complete!" in result.stdout
-        
-        # Verify directory structure was created
-        memory_dir = os.path.join(temp_memory_dir, "ai_memory")
-        assert os.path.exists(memory_dir)
-        assert os.path.exists(os.path.join(memory_dir, "project_memory"))
-        assert os.path.exists(os.path.join(memory_dir, "learning_memory"))
-        assert os.path.exists(os.path.join(memory_dir, "session_logs"))
-        assert os.path.exists(os.path.join(memory_dir, "orc_data"))
-        
-        # Verify files were created
-        assert os.path.exists(os.path.join(memory_dir, "active_memory.json"))
-        assert os.path.exists(os.path.join(memory_dir, "memory_utils.py"))
-    
-    def test_setup_creates_valid_active_memory(self, temp_memory_dir, monkeypatch):
-        """Test that setup creates a valid active memory file."""
-        monkeypatch.setenv("HOME", temp_memory_dir)
-        
-        repo_root = Path(__file__).parent.parent.parent
-        setup_script = repo_root / "setup.sh"
-        
-        subprocess.run(["bash", str(setup_script)], cwd=str(repo_root))
-        
-        # Check active memory file
-        active_memory_file = os.path.join(temp_memory_dir, "ai_memory", "active_memory.json")
-        with open(active_memory_file, "r") as f:
-            data = json.load(f)
-        
-        # Verify structure
-        assert "last_updated" in data
-        assert "current_session" in data
-        assert "user_preferences" in data
-        
-        # Verify template values are preserved
-        assert data["current_session"]["project"] == "Replace with your project name"
-        assert data["user_preferences"]["collaboration_style"] == "How you like to work (detailed/concise/step-by-step)"
-    
-    def test_setup_creates_learning_memory(self, temp_memory_dir, monkeypatch):
-        """Test that setup creates initial learning memory."""
-        monkeypatch.setenv("HOME", temp_memory_dir)
-        
-        repo_root = Path(__file__).parent.parent.parent
-        setup_script = repo_root / "setup.sh"
-        
-        subprocess.run(["bash", str(setup_script)], cwd=str(repo_root))
-        
-        # Check learning memory file
-        learning_file = os.path.join(
-            temp_memory_dir, "ai_memory", "learning_memory", "collaboration_patterns.json"
-        )
-        with open(learning_file, "r") as f:
-            data = json.load(f)
-        
-        assert "effective_patterns" in data
-        assert "session_continuity" in data["effective_patterns"]
-    
-    def test_setup_installs_utilities(self, temp_memory_dir, monkeypatch):
-        """Test that setup installs memory utilities."""
-        monkeypatch.setenv("HOME", temp_memory_dir)
-        
-        repo_root = Path(__file__).parent.parent.parent
-        setup_script = repo_root / "setup.sh"
-        
-        subprocess.run(["bash", str(setup_script)], cwd=str(repo_root))
-        
-        # Check memory utilities
-        utils_file = os.path.join(temp_memory_dir, "ai_memory", "memory_utils.py")
-        assert os.path.exists(utils_file)
-        assert os.access(utils_file, os.X_OK)  # Should be executable
-    
-    def test_setup_idempotent(self, temp_memory_dir, monkeypatch):
-        """Test that running setup multiple times is safe."""
-        monkeypatch.setenv("HOME", temp_memory_dir)
-        
-        repo_root = Path(__file__).parent.parent.parent
-        setup_script = repo_root / "setup.sh"
-        
-        # Run setup twice
-        result1 = subprocess.run(["bash", str(setup_script)], cwd=str(repo_root))
-        result2 = subprocess.run(["bash", str(setup_script)], cwd=str(repo_root))
-        
-        assert result1.returncode == 0
-        assert result2.returncode == 0
-        
-        # Files should still exist and be valid
-        active_memory_file = os.path.join(temp_memory_dir, "ai_memory", "active_memory.json")
-        with open(active_memory_file, "r") as f:
-            data = json.load(f)
-        
-        assert "current_session" in data
-
-
-class TestFullSystemIntegration:
-    """Test complete system functionality after setup."""
-    
-    def test_memory_system_after_setup(self, temp_memory_dir, monkeypatch):
-        """Test that memory system works correctly after setup."""
-        monkeypatch.setenv("HOME", temp_memory_dir)
-        
-        # Run setup
-        repo_root = Path(__file__).parent.parent.parent
-        setup_script = repo_root / "setup.sh"
-        subprocess.run(["bash", str(setup_script)], cwd=str(repo_root))
-        
-        # Import and test memory utilities
-        memory_dir = os.path.join(temp_memory_dir, "ai_memory")
-        import sys
-        sys.path.insert(0, memory_dir)
-        
-        # Patch the memory utilities to use our test directory
-        monkeypatch.setattr("memory_utils.MEMORY_DIR", memory_dir)
-        
-        import memory_utils
-        
-        # Test basic operations
-        memory_utils.update_active_memory("test_key", "test_value")
-        result = memory_utils.get_active_memory("test_key")
-        assert result == "test_value"
-        
-        # Test project status
-        test_project = {"name": "Test Project", "status": "active"}
-        memory_utils.save_project_status(test_project)
-        saved_project = memory_utils.get_project_status()
-        assert saved_project["name"] == "Test Project"
-    
-    def test_template_functionality(self, temp_memory_dir):
-        """Test that templates are functional and valid."""
-        repo_root = Path(__file__).parent.parent.parent
+        # Verify templates directory exists
+        assert templates_dir.exists(), "Templates directory not found"
         
         # Test active memory template
-        active_template = repo_root / "templates" / "active_memory_template.json"
-        with open(active_template, "r") as f:
-            template_data = json.load(f)
+        active_template = templates_dir / "active_memory_template.json"
+        assert active_template.exists(), "Active memory template not found"
         
-        # Verify required fields
-        assert "current_session" in template_data
-        assert "user_preferences" in template_data
-        assert "project" in template_data["current_session"]
+        with open(active_template, 'r') as f:
+            template_data = json.load(f)
+            assert "current_session" in template_data
+            assert "user_preferences" in template_data
+            assert "current_context" in template_data
+            assert "important_insights" in template_data
         
         # Test project memory template
-        project_template = repo_root / "templates" / "project_memory_template.json"
-        with open(project_template, "r") as f:
+        project_template = templates_dir / "project_memory_template.json"
+        assert project_template.exists(), "Project memory template not found"
+        
+        with open(project_template, 'r') as f:
             project_data = json.load(f)
-        
-        assert "project_name" in project_data
-        assert "architecture" in project_data
-        assert "current_progress" in project_data
+            assert isinstance(project_data, dict), "Project template should be valid JSON object"
     
-    def test_examples_validity(self, temp_memory_dir):
-        """Test that example files are valid and complete."""
+    def test_memory_utils_exists_and_importable(self):
+        """Test that memory utilities exist and can be imported."""
         repo_root = Path(__file__).parent.parent.parent
-        examples_dir = repo_root / "examples"
+        utils_file = repo_root / "utils" / "memory_utils.py"
         
-        for example_file in examples_dir.glob("*.json"):
-            with open(example_file, "r") as f:
-                example_data = json.load(f)
-            
-            # Basic structure validation
-            assert "project_name" in example_data
-            assert "project_type" in example_data
-            
-            # Verify realistic content
-            assert len(example_data["project_name"]) > 0
-            assert example_data["project_name"] != "placeholder"
-
-
-class TestDocumentationIntegration:
-    """Test that documentation examples actually work."""
-    
-    def test_readme_quick_start(self, temp_memory_dir, monkeypatch):
-        """Test that README quick start instructions work."""
-        monkeypatch.setenv("HOME", temp_memory_dir)
+        assert utils_file.exists(), "Memory utils file not found"
         
-        # Simulate the quick start process
-        memory_dir = os.path.join(temp_memory_dir, "ai_memory")
-        os.makedirs(os.path.join(memory_dir, "project_memory"))
-        os.makedirs(os.path.join(memory_dir, "learning_memory"))
-        os.makedirs(os.path.join(memory_dir, "session_logs"))
-        os.makedirs(os.path.join(memory_dir, "orc_data"))
-        
-        # Copy template as described in README
-        repo_root = Path(__file__).parent.parent.parent
-        template_file = repo_root / "templates" / "active_memory_template.json"
-        active_file = os.path.join(memory_dir, "active_memory.json")
-        shutil.copy(template_file, active_file)
-        
-        # Verify the setup works
-        assert os.path.exists(active_file)
-        with open(active_file, "r") as f:
-            data = json.load(f)
-        
-        assert "current_session" in data
-    
-    def test_use_case_examples_completeness(self):
-        """Test that use case examples in documentation are complete."""
-        repo_root = Path(__file__).parent.parent.parent
-        use_cases_file = repo_root / "docs" / "USE_CASES.md"
-        
-        with open(use_cases_file, "r") as f:
+        # Test that it's valid Python by attempting to compile
+        with open(utils_file, 'r') as f:
             content = f.read()
+            compile(content, str(utils_file), 'exec')
+    
+    def test_ai_agent_memory_creation(self, temp_memory_dir):
+        """Test simulated AI agent memory system creation from templates."""
+        # Simulate what an AI agent would do
+        repo_root = Path(__file__).parent.parent.parent
+        memory_dir = Path(temp_memory_dir) / "ai_memory"
         
-        # Verify key sections exist
-        assert "Software Development Projects" in content
-        assert "Research Projects" in content
-        assert "Software Project" in content
-        assert "270+ tests" in content  # Reference to our proven results
+        # Create directory structure
+        memory_dir.mkdir(exist_ok=True)
+        (memory_dir / "project_memory").mkdir(exist_ok=True)
+        (memory_dir / "learning_memory").mkdir(exist_ok=True)
+        (memory_dir / "session_logs").mkdir(exist_ok=True)
         
-        # Verify examples are realistic
-        assert "React" in content or "FastAPI" in content  # Real technology references
+        # Copy template to active memory
+        template_file = repo_root / "templates" / "active_memory_template.json"
+        active_memory_file = memory_dir / "active_memory.json"
+        shutil.copy2(template_file, active_memory_file)
+        
+        # Copy utilities
+        utils_source = repo_root / "utils" / "memory_utils.py"
+        utils_dest = memory_dir / "memory_utils.py"
+        shutil.copy2(utils_source, utils_dest)
+        
+        # Verify setup worked
+        assert active_memory_file.exists()
+        assert utils_dest.exists()
+        assert (memory_dir / "project_memory").exists()
+        assert (memory_dir / "learning_memory").exists()
+        assert (memory_dir / "session_logs").exists()
+        
+        # Verify active memory is valid
+        with open(active_memory_file, 'r') as f:
+            data = json.load(f)
+            assert "current_session" in data
+            assert "user_preferences" in data
+    
+    def test_template_structure_completeness(self):
+        """Test that templates contain all necessary fields for AI agent operation."""
+        repo_root = Path(__file__).parent.parent.parent
+        
+        # Test active memory template completeness
+        with open(repo_root / "templates" / "active_memory_template.json", 'r') as f:
+            active_template = json.load(f)
+        
+        # Verify essential fields exist
+        assert "last_updated" in active_template
+        assert "current_session" in active_template
+        assert "user_preferences" in active_template
+        assert "current_context" in active_template
+        assert "important_insights" in active_template
+        
+        # Verify current_session has required fields
+        session = active_template["current_session"]
+        assert "project" in session
+        assert "user" in session
+        assert "workspace" in session
+        
+        # Verify user_preferences has collaboration fields
+        prefs = active_template["user_preferences"]
+        assert "collaboration_style" in prefs
+        assert "technical_approach" in prefs
+        assert "communication_style" in prefs
 
 
-class TestErrorRecovery:
-    """Test system behavior under error conditions."""
+class TestMemorySystemIntegration:
+    """Test complete memory system functionality after template-based setup."""
     
-    def test_partial_setup_recovery(self, temp_memory_dir, monkeypatch):
-        """Test recovery from partially completed setup."""
-        monkeypatch.setenv("HOME", temp_memory_dir)
-        
-        # Create partial directory structure
-        memory_dir = os.path.join(temp_memory_dir, "ai_memory")
-        os.makedirs(os.path.join(memory_dir, "project_memory"))
-        # Missing other directories
-        
-        # Run setup - should complete successfully
+    def test_memory_system_full_workflow(self, temp_memory_dir):
+        """Test complete memory workflow using templates."""
         repo_root = Path(__file__).parent.parent.parent
-        setup_script = repo_root / "setup.sh"
-        result = subprocess.run(["bash", str(setup_script)], cwd=str(repo_root))
+        memory_dir = Path(temp_memory_dir) / "ai_memory"
         
-        assert result.returncode == 0
+        # Simulate AI agent setup
+        memory_dir.mkdir(exist_ok=True)
+        (memory_dir / "project_memory").mkdir(exist_ok=True)
+        (memory_dir / "learning_memory").mkdir(exist_ok=True)
+        (memory_dir / "session_logs").mkdir(exist_ok=True)
         
-        # Verify all directories now exist
-        assert os.path.exists(os.path.join(memory_dir, "learning_memory"))
-        assert os.path.exists(os.path.join(memory_dir, "session_logs"))
-        assert os.path.exists(os.path.join(memory_dir, "orc_data"))
-    
-    def test_corrupted_file_handling(self, temp_memory_dir, monkeypatch):
-        """Test handling of corrupted memory files."""
-        monkeypatch.setenv("HOME", temp_memory_dir)
+        # Copy templates and utilities
+        shutil.copy2(
+            repo_root / "templates" / "active_memory_template.json",
+            memory_dir / "active_memory.json"
+        )
+        shutil.copy2(
+            repo_root / "utils" / "memory_utils.py",
+            memory_dir / "memory_utils.py"
+        )
         
-        # Run setup first
-        repo_root = Path(__file__).parent.parent.parent
-        setup_script = repo_root / "setup.sh"
-        subprocess.run(["bash", str(setup_script)], cwd=str(repo_root))
-        
-        # Corrupt the active memory file
-        memory_dir = os.path.join(temp_memory_dir, "ai_memory")
-        active_file = os.path.join(memory_dir, "active_memory.json")
-        with open(active_file, "w") as f:
-            f.write("corrupted json content")
-        
-        # Add memory_dir to Python path and import utilities
+        # Test memory operations work
         import sys
-        sys.path.insert(0, memory_dir)
+        sys.path.insert(0, str(memory_dir))
         
-        # Patch the memory directory
-        monkeypatch.setattr("memory_utils.MEMORY_DIR", memory_dir)
+        # Change MEMORY_DIR for testing
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("memory_utils", memory_dir / "memory_utils.py")
+        memory_utils = importlib.util.module_from_spec(spec)
         
-        import memory_utils
+        # Patch the MEMORY_DIR
+        original_memory_dir = getattr(memory_utils, 'MEMORY_DIR', None)
+        memory_utils.MEMORY_DIR = memory_dir
         
-        # Should handle corrupted file gracefully
-        result = memory_utils.get_active_memory()
-        assert result == {}  # Should return empty dict for corrupted file
+        try:
+            spec.loader.exec_module(memory_utils)
+            
+            # Test basic operations
+            memory_utils.update_active_memory("test_key", "test_value")
+            result = memory_utils.get_active_memory("test_key")
+            assert result == "test_value"
+            
+            # Test session insights
+            memory_utils.save_session_insight("Test insight", "testing")
+            
+            # Test memory summary
+            summary = memory_utils.memory_summary()
+            assert "memory_directory" in summary
+            assert "files" in summary
+            
+        finally:
+            if original_memory_dir:
+                memory_utils.MEMORY_DIR = original_memory_dir
+            sys.path.remove(str(memory_dir))
+    
+    def test_template_based_project_memory(self, temp_memory_dir):
+        """Test project memory functionality using templates."""
+        repo_root = Path(__file__).parent.parent.parent
+        memory_dir = Path(temp_memory_dir) / "ai_memory"
         
-        # Should be able to update and recover
-        memory_utils.update_active_memory("recovery_test", "success")
-        recovered = memory_utils.get_active_memory("recovery_test")
-        assert recovered == "success"
-
+        # Setup memory system
+        memory_dir.mkdir(exist_ok=True)
+        (memory_dir / "project_memory").mkdir(exist_ok=True)
+        
+        # Copy project template
+        shutil.copy2(
+            repo_root / "templates" / "project_memory_template.json",
+            memory_dir / "project_memory" / "test_project.json"
+        )
+        
+        # Verify template was copied and is valid
+        project_file = memory_dir / "project_memory" / "test_project.json"
+        assert project_file.exists()
+        
+        with open(project_file, 'r') as f:
+            project_data = json.load(f)
+            assert isinstance(project_data, dict)

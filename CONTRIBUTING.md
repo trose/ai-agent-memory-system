@@ -26,8 +26,8 @@ git remote add upstream https://github.com/trose/ai-agent-memory-system.git
 # Install development dependencies
 pip install -r requirements-dev.txt
 
-# Run setup to test installation
-./setup.sh
+# Test that templates and utilities are accessible
+ls templates/ utils/
 
 # Run tests to ensure everything works
 python -m pytest tests/

@@ -20,9 +20,9 @@ That's it! Your AI agent will handle the technical setup and explain how to use 
 ## What This Does
 
 The AI agent will:
-- Clone the repository and run `./setup.sh`
+- Clone the repository and access the templates
 - Create `~/ai_memory/` directory structure
-- Set up initial memory files
+- Set up initial memory files using templates
 - Explain how to maintain context across sessions
 - Start using persistent memory immediately
 

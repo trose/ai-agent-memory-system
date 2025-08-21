@@ -165,3 +165,6 @@ examples/*/learning_memory/
 examples/*/session_logs/
 examples/*/orc_data/*.orc
 
+# Benchmark results
+.benchmarks/
+

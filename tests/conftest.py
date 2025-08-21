@@ -76,18 +76,9 @@ def sample_project_memory() -> Dict[str, Any]:
 @pytest.fixture
 def memory_utils_module(temp_memory_dir, monkeypatch):
     """Mock memory_utils module with temporary directory."""
-    # Patch the memory directory constants
-    monkeypatch.setattr("utils.memory_utils.MEMORY_DIR", temp_memory_dir)
-    monkeypatch.setattr("utils.memory_utils.ACTIVE_MEMORY_FILE", 
-                       os.path.join(temp_memory_dir, "active_memory.json"))
-    monkeypatch.setattr("utils.memory_utils.PROJECT_MEMORY_DIR", 
-                       os.path.join(temp_memory_dir, "project_memory"))
-    monkeypatch.setattr("utils.memory_utils.LEARNING_MEMORY_DIR", 
-                       os.path.join(temp_memory_dir, "learning_memory"))
-    monkeypatch.setattr("utils.memory_utils.SESSION_LOGS_DIR", 
-                       os.path.join(temp_memory_dir, "session_logs"))
-    monkeypatch.setattr("utils.memory_utils.ORC_DATA_DIR", 
-                       os.path.join(temp_memory_dir, "orc_data"))
+    # Patch the memory directory constant
+    from pathlib import Path
+    monkeypatch.setattr("utils.memory_utils.MEMORY_DIR", Path(temp_memory_dir))
     
     # Import after patching
     import utils.memory_utils as memory_utils

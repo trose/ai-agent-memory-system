@@ -23,8 +23,8 @@ A persistent memory system for AI agents to maintain context across sessions.
 ## Table of Contents
 
 - [What This Solves](#what-this-solves)
-- [Performance Impact](#performance-impact)
 - [Quick Start](#quick-start)
+- [Performance Impact](#performance-impact)
 - [Directory Structure](#directory-structure)
 - [Features](#features)
 - [Documentation](#documentation)
@@ -43,6 +43,16 @@ Lost context between AI sessions? This system allows any AI agent to:
 - Learn from effective collaboration patterns
 - Maintain continuity across sessions
 - Track progress and insights over time
+
+## Quick Start
+
+Tell your AI agent:
+
+```
+Set up persistent memory using files from https://trose.github.io/ai-agent-memory-system/ - download the templates and create ~/ai_memory/ to remember our work across sessions.
+```
+
+Your AI agent will handle the technical setup and start using memory immediately.
 
 ## Performance Impact
 
@@ -68,16 +78,6 @@ Memory-enabled AI interactions typically provide:
 - **Higher consistency** - No need to re-explain project context and preferences
 - **Faster task completion** - Less time spent on context-gathering  
 - **Reduced repetition** - Agents remember what you've already discussed
-
-## Quick Start
-
-Tell your AI agent:
-
-```
-Set up persistent memory using files from https://trose.github.io/ai-agent-memory-system/ - download the templates and create ~/ai_memory/ to remember our work across sessions.
-```
-
-Your AI agent will handle the technical setup and start using memory immediately.
 
 ## Directory Structure
 

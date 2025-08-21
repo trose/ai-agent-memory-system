@@ -84,7 +84,6 @@ Your AI agent will handle the technical setup and start using memory immediately
 ## Documentation
 
 - [Complete Guide](docs/COMPLETE_GUIDE.md) - Full setup and usage
-- [Quick Start Template](docs/QUICK_START_TEMPLATE.md) - Copy-paste setup
 - [Use Cases](docs/USE_CASES.md) - Real examples
 
 ## Use Cases

@@ -20,6 +20,20 @@
 
 A persistent memory system for AI agents to maintain context across sessions.
 
+## Table of Contents
+
+- [What This Solves](#what-this-solves)
+- [Performance Impact](#performance-impact)
+- [Quick Start](#quick-start)
+- [Directory Structure](#directory-structure)
+- [Features](#features)
+- [Documentation](#documentation)
+- [Use Cases](#use-cases)
+- [Similar Solutions & Comparisons](#similar-solutions--comparisons)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
+- [License](#license)
+
 ## What This Solves
 
 Lost context between AI sessions? This system allows any AI agent to:

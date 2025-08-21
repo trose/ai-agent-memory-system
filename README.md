@@ -59,7 +59,7 @@ Memory-enabled AI interactions typically provide:
 Tell your AI agent:
 
 ```
-Please set up the AI Agent Memory System from https://github.com/trose/ai-agent-memory-system - use the templates to create a memory system for our project and start using persistent memory.
+Set up persistent memory using files from https://trose.github.io/ai-agent-memory-system/ - download the templates and create ~/ai_memory/ to remember our work across sessions.
 ```
 
 Your AI agent will handle the technical setup and start using memory immediately.

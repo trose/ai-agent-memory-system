@@ -17,6 +17,9 @@ def update_active_memory(key: str, value: Any) -> None:
     """Update a key in active memory."""
     memory_file = MEMORY_DIR / "active_memory.json"
     
+    # Ensure directory exists
+    memory_file.parent.mkdir(parents=True, exist_ok=True)
+    
     if memory_file.exists():
         with open(memory_file, 'r') as f:
             memory = json.load(f)
@@ -44,6 +47,9 @@ def get_active_memory(key: str = None) -> Any:
 def save_session_insight(insight: str, category: str = "general") -> None:
     """Save a new insight from the current session."""
     insights_file = MEMORY_DIR / "learning_memory" / "session_insights.json"
+    
+    # Ensure directory exists
+    insights_file.parent.mkdir(parents=True, exist_ok=True)
     
     if insights_file.exists():
         with open(insights_file, 'r') as f:
@@ -82,6 +88,10 @@ def get_project_context(project_name: str = None) -> Dict[str, Any]:
 
 def create_orc_data(data: List[Dict], filename: str) -> None:
     """Create ORC file for analytical data (requires pyarrow)."""
+    # Ensure directory exists
+    orc_dir = MEMORY_DIR / "orc_data"
+    orc_dir.mkdir(parents=True, exist_ok=True)
+    
     try:
         import pyarrow as pa
         import pyarrow.orc as orc
@@ -90,7 +100,7 @@ def create_orc_data(data: List[Dict], filename: str) -> None:
         df = pd.DataFrame(data)
         table = pa.Table.from_pandas(df)
         
-        orc_file = MEMORY_DIR / "orc_data" / f"{filename}.orc"
+        orc_file = orc_dir / f"{filename}.orc"
         with open(orc_file, 'wb') as f:
             orc.write_table(table, f)
         
@@ -99,7 +109,7 @@ def create_orc_data(data: List[Dict], filename: str) -> None:
     except ImportError:
         print("PyArrow not available. Install with: pip install pyarrow")
         # Fallback to JSON
-        json_file = MEMORY_DIR / "orc_data" / f"{filename}_fallback.json"
+        json_file = orc_dir / f"{filename}_fallback.json"
         with open(json_file, 'w') as f:
             json.dump(data, f, indent=2)
         print(f"Fallback JSON created: {json_file}")
@@ -118,11 +128,15 @@ def memory_summary() -> Dict[str, Any]:
             files = list(category_path.glob("*"))
             summary["files"][category_dir] = [str(f.name) for f in files]
     
-    # Add active memory status
+    # Add active memory status and merge all keys into summary
     active = get_active_memory()
     if active:
         summary["current_session"] = active.get("current_session", {})
         summary["user_preferences"] = active.get("user_preferences", {})
+        # Merge all active memory keys into summary for easy access
+        for key, value in active.items():
+            if key not in ["current_session", "user_preferences", "last_updated"]:
+                summary[key] = value
     
     return summary
 

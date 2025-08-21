@@ -292,3 +292,4 @@ class TestMemoryEfficiency:
         
         # Current session should be the latest
         assert active_memory["current_session"]["session_id"] == 9
+

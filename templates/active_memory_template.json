@@ -23,8 +23,9 @@
     "next_priorities": []
   },
   "important_insights": [
-    "Add insights Claude should remember about your working style",
+    "Add insights your AI agent should remember about your working style",
     "Technical preferences or constraints",
     "Project-specific important context"
   ]
 }
+

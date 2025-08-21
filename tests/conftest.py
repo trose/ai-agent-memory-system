@@ -1,5 +1,5 @@
 """
-Test configuration and fixtures for Claude Memory System tests.
+Test configuration and fixtures for AI Agent Memory System tests.
 """
 import os
 import json
@@ -150,3 +150,4 @@ def mock_datetime(monkeypatch):
     """Mock datetime.utcnow() for consistent testing."""
     monkeypatch.setattr("utils.memory_utils.datetime", MockDatetime)
     return MockDatetime
+

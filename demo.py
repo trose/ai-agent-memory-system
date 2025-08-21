@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-🧠 Claude Memory System - Interactive Demo
+AI Agent Memory System - Interactive Demo
 
-This script provides an interactive demonstration of the Claude Memory System,
+This script provides an interactive demonstration of the AI Agent Memory System,
 showing how to use persistent memory for AI collaboration across sessions.
 """
 
@@ -53,7 +53,7 @@ def wait_for_user():
     input(f"\n{Colors.YELLOW}Press Enter to continue...{Colors.END}")
 
 class MemorySystemDemo:
-    """Interactive demo of the Claude Memory System."""
+    """Interactive demo of the AI Agent Memory System."""
     
     def __init__(self):
         self.demo_dir = None
@@ -65,15 +65,14 @@ class MemorySystemDemo:
         
         # Create temporary demo directory
         import tempfile
-        self.demo_dir = tempfile.mkdtemp(prefix="claude_memory_demo_")
+        self.demo_dir = tempfile.mkdtemp(prefix="ai_memory_demo_")
         print_info(f"Created demo directory: {self.demo_dir}")
         
         # Create memory structure
         memory_dirs = [
             "project_memory",
             "learning_memory", 
-            "session_logs",
-            "orc_data"
+            "session_logs"
         ]
         
         for dir_name in memory_dirs:
@@ -99,7 +98,7 @@ class MemorySystemDemo:
         memory_utils.PROJECT_MEMORY_DIR = os.path.join(self.demo_dir, "project_memory")
         memory_utils.LEARNING_MEMORY_DIR = os.path.join(self.demo_dir, "learning_memory")
         memory_utils.SESSION_LOGS_DIR = os.path.join(self.demo_dir, "session_logs")
-        memory_utils.ORC_DATA_DIR = os.path.join(self.demo_dir, "orc_data")
+
         
         self.memory_utils = memory_utils
         print_success("Memory system initialized!")
@@ -111,13 +110,13 @@ class MemorySystemDemo:
         print_step("2", "Active Memory - Current Session Context")
         
         print_info("Active memory stores your current session context and preferences.")
-        print_info("This is the first thing Claude checks when you start a new conversation.")
+        print_info("This is the first thing your AI agent checks when you start a new conversation.")
         
         # Initial session setup
         print("\n" + Colors.CYAN + "Setting up initial session context:" + Colors.END)
         
         session_data = {
-            "project": "Claude Memory System Demo",
+            "project": "AI Agent Memory System Demo",
             "user": "Demo User",
             "workspace": self.demo_dir,
             "session_focus": "Learning how persistent memory transforms AI collaboration",
@@ -157,7 +156,7 @@ class MemorySystemDemo:
             "last_updated": active_memory.get("last_updated", "unknown")
         }, indent=2))
         
-        print_info("💡 Claude can now remember your project context and preferences!")
+        print_info("💡 your AI agent can now remember your project context and preferences!")
         wait_for_user()
     
     def demo_project_memory(self):
@@ -232,7 +231,7 @@ class MemorySystemDemo:
         print(f"✅ Completed: {len(saved_project['current_progress']['completed_features'])} features")
         print(f"🔄 In Progress: {len(saved_project['current_progress']['in_progress'])} items")
         
-        print_info("💡 Claude now knows your entire project context and can build on previous work!")
+        print_info("💡 your AI agent now knows your entire project context and can build on previous work!")
         wait_for_user()
     
     def demo_learning_memory(self):
@@ -274,7 +273,7 @@ class MemorySystemDemo:
         for insight_data in perf_insights.get("performance", []):
             print(f"  💡 {insight_data['insight']}")
         
-        print_info("💡 Claude learns from every project and applies insights to new challenges!")
+        print_info("💡 your AI agent learns from every project and applies insights to new challenges!")
         wait_for_user()
     
     def demo_session_logging(self):
@@ -286,7 +285,7 @@ class MemorySystemDemo:
         
         # Log various activities
         activities = [
-            "Completed Claude Memory System demo setup",
+            "Completed AI Agent Memory System demo setup",
             "Demonstrated active memory for session context",
             "Showed project memory for architecture persistence",
             "Captured learning insights for future reference",
@@ -341,7 +340,7 @@ class MemorySystemDemo:
         print(f"  Style: {prefs.get('collaboration_style', 'Not specified')}")
         print(f"  Approach: {prefs.get('technical_approach', 'Not specified')}")
         
-        print_info("💡 One command gives Claude complete context about your work!")
+        print_info("💡 One command gives your AI agent complete context about your work!")
         wait_for_user()
     
     def demo_real_world_scenario(self):
@@ -417,7 +416,7 @@ class MemorySystemDemo:
         print(f"📋 Session activities: Complete development timeline")
         
         print_info("💡 Each session builds perfectly on the previous work!")
-        print_info("Claude has complete context and can continue exactly where you left off!")
+        print_info("your AI agent has complete context and can continue exactly where you left off!")
         
         wait_for_user()
     
@@ -429,7 +428,7 @@ class MemorySystemDemo:
         
         benefits = [
             ("🚀 Context Continuity", "No more re-explaining project details each session"),
-            ("🧠 Learning Amplification", "AI learns your preferences and applies them consistently"),
+            ("Memory Learning Amplification", "AI learns your preferences and applies them consistently"),
             ("📈 Quality Improvement", "Decisions and insights compound over time"),
             ("⚡ Reduced Friction", "Start new sessions immediately with full context"),
             ("🎯 Focused Sessions", "Spend time on new problems, not recap"),
@@ -491,9 +490,9 @@ class MemorySystemDemo:
     
     def run_demo(self):
         """Run the complete interactive demo."""
-        print_header("🧠 CLAUDE MEMORY SYSTEM - INTERACTIVE DEMO")
+        print_header("Memory CLAUDE MEMORY SYSTEM - INTERACTIVE DEMO")
         
-        print(f"{Colors.BOLD}Welcome to the Claude Memory System Demo!{Colors.END}")
+        print(f"{Colors.BOLD}Welcome to the AI Agent Memory System Demo!{Colors.END}")
         print(f"{Colors.CYAN}This demonstration will show you how persistent memory")
         print(f"transforms AI collaboration from session-based to continuous.{Colors.END}")
         
@@ -554,3 +553,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

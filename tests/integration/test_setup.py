@@ -36,7 +36,7 @@ class TestSetupScript:
         assert "Setup complete!" in result.stdout
         
         # Verify directory structure was created
-        memory_dir = os.path.join(temp_memory_dir, "claude_memory")
+        memory_dir = os.path.join(temp_memory_dir, "ai_memory")
         assert os.path.exists(memory_dir)
         assert os.path.exists(os.path.join(memory_dir, "project_memory"))
         assert os.path.exists(os.path.join(memory_dir, "learning_memory"))
@@ -57,7 +57,7 @@ class TestSetupScript:
         subprocess.run(["bash", str(setup_script)], cwd=str(repo_root))
         
         # Check active memory file
-        active_memory_file = os.path.join(temp_memory_dir, "claude_memory", "active_memory.json")
+        active_memory_file = os.path.join(temp_memory_dir, "ai_memory", "active_memory.json")
         with open(active_memory_file, "r") as f:
             data = json.load(f)
         
@@ -81,7 +81,7 @@ class TestSetupScript:
         
         # Check learning memory file
         learning_file = os.path.join(
-            temp_memory_dir, "claude_memory", "learning_memory", "collaboration_patterns.json"
+            temp_memory_dir, "ai_memory", "learning_memory", "collaboration_patterns.json"
         )
         with open(learning_file, "r") as f:
             data = json.load(f)
@@ -99,7 +99,7 @@ class TestSetupScript:
         subprocess.run(["bash", str(setup_script)], cwd=str(repo_root))
         
         # Check memory utilities
-        utils_file = os.path.join(temp_memory_dir, "claude_memory", "memory_utils.py")
+        utils_file = os.path.join(temp_memory_dir, "ai_memory", "memory_utils.py")
         assert os.path.exists(utils_file)
         assert os.access(utils_file, os.X_OK)  # Should be executable
     
@@ -118,7 +118,7 @@ class TestSetupScript:
         assert result2.returncode == 0
         
         # Files should still exist and be valid
-        active_memory_file = os.path.join(temp_memory_dir, "claude_memory", "active_memory.json")
+        active_memory_file = os.path.join(temp_memory_dir, "ai_memory", "active_memory.json")
         with open(active_memory_file, "r") as f:
             data = json.load(f)
         
@@ -138,7 +138,7 @@ class TestFullSystemIntegration:
         subprocess.run(["bash", str(setup_script)], cwd=str(repo_root))
         
         # Import and test memory utilities
-        memory_dir = os.path.join(temp_memory_dir, "claude_memory")
+        memory_dir = os.path.join(temp_memory_dir, "ai_memory")
         import sys
         sys.path.insert(0, memory_dir)
         
@@ -207,7 +207,7 @@ class TestDocumentationIntegration:
         monkeypatch.setenv("HOME", temp_memory_dir)
         
         # Simulate the quick start process
-        memory_dir = os.path.join(temp_memory_dir, "claude_memory")
+        memory_dir = os.path.join(temp_memory_dir, "ai_memory")
         os.makedirs(os.path.join(memory_dir, "project_memory"))
         os.makedirs(os.path.join(memory_dir, "learning_memory"))
         os.makedirs(os.path.join(memory_dir, "session_logs"))
@@ -237,7 +237,7 @@ class TestDocumentationIntegration:
         # Verify key sections exist
         assert "Software Development Projects" in content
         assert "Research Projects" in content
-        assert "Ice Tea Identity Verification Platform" in content
+        assert "Software Project" in content
         assert "270+ tests" in content  # Reference to our proven results
         
         # Verify examples are realistic
@@ -252,7 +252,7 @@ class TestErrorRecovery:
         monkeypatch.setenv("HOME", temp_memory_dir)
         
         # Create partial directory structure
-        memory_dir = os.path.join(temp_memory_dir, "claude_memory")
+        memory_dir = os.path.join(temp_memory_dir, "ai_memory")
         os.makedirs(os.path.join(memory_dir, "project_memory"))
         # Missing other directories
         
@@ -278,7 +278,7 @@ class TestErrorRecovery:
         subprocess.run(["bash", str(setup_script)], cwd=str(repo_root))
         
         # Corrupt the active memory file
-        memory_dir = os.path.join(temp_memory_dir, "claude_memory")
+        memory_dir = os.path.join(temp_memory_dir, "ai_memory")
         active_file = os.path.join(memory_dir, "active_memory.json")
         with open(active_file, "w") as f:
             f.write("corrupted json content")
@@ -300,3 +300,4 @@ class TestErrorRecovery:
         memory_utils.update_active_memory("recovery_test", "success")
         recovered = memory_utils.get_active_memory("recovery_test")
         assert recovered == "success"
+

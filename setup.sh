@@ -1,28 +1,28 @@
 #!/bin/bash
-# Claude Memory System Setup Script
+# AI Agent Memory System Setup Script
 
 set -e
 
-echo "🧠 Setting up Claude Memory System..."
+echo "Setting up AI Agent Memory System..."
 
 # Create memory directory structure
 echo "📁 Creating memory directory structure..."
-mkdir -p ~/claude_memory/{project_memory,learning_memory,orc_data,session_logs}
+mkdir -p ~/ai_memory/{project_memory,learning_memory,session_logs}
 
 # Copy templates
 echo "📝 Installing templates..."
-cp templates/active_memory_template.json ~/claude_memory/active_memory.json
+cp templates/active_memory_template.json ~/ai_memory/active_memory.json
 echo "   ✅ Active memory template installed"
 
 # Copy utilities
 echo "🛠️  Installing utilities..."
-cp utils/memory_utils.py ~/claude_memory/
-chmod +x ~/claude_memory/memory_utils.py
+cp utils/memory_utils.py ~/ai_memory/
+chmod +x ~/ai_memory/memory_utils.py
 echo "   ✅ Memory utilities installed"
 
 # Create initial learning memory
-echo "🧠 Setting up learning memory..."
-cat > ~/claude_memory/learning_memory/collaboration_patterns.json << 'EOF'
+echo "Memory Setting up learning memory..."
+cat > ~/ai_memory/learning_memory/collaboration_patterns.json << 'EOF'
 {
   "effective_patterns": {
     "session_continuity": {
@@ -38,30 +38,29 @@ cat > ~/claude_memory/learning_memory/collaboration_patterns.json << 'EOF'
 EOF
 echo "   ✅ Learning memory initialized"
 
-# Create ORC data README
-echo "📊 Setting up analytics..."
-cp docs/ORC_SETUP.md ~/claude_memory/orc_data/README.md 2>/dev/null || cat > ~/claude_memory/orc_data/README.md << 'EOF'
-# ORC Data for Fast Analytics
+# Create session logs README
+echo "Creating session logs..."
+cat > ~/ai_memory/session_logs/README.md << 'EOF'
+# Session Logs
 
-This directory is ready for ORC files when PyArrow is installed:
+This directory contains important milestones and session records.
 
-```bash
-pip install pyarrow
-```
-
-Then use the memory utilities to create analytical datasets for fast querying.
+Use this to track:
+- Major project milestones
+- Important decisions made
+- Key insights discovered
+- Progress summaries
 EOF
-echo "   ✅ Analytics directory ready"
+echo "   ✅ Session logs directory ready"
 
 echo ""
-echo "🎉 Setup complete!"
+echo "Setup complete!"
 echo ""
 echo "Next steps:"
-echo "1. Edit ~/claude_memory/active_memory.json with your project details"
-echo "2. Tell Claude: 'I've set up a memory system at ~/claude_memory/ - please use it to remember our work together'"
+echo "1. Edit ~/ai_memory/active_memory.json with your project details"
+echo "2. Tell your AI agent: 'I've set up a memory system at ~/ai_memory/ - please use it to remember our work together'"
 echo "3. Start collaborating with persistent context!"
 echo ""
-echo "📖 Documentation: docs/QUICK_START_TEMPLATE.md"
-echo "🛠️  Utilities: ~/claude_memory/memory_utils.py"
-echo ""
-echo "Happy collaborating! 🚀"
+echo "Documentation: docs/QUICK_START_TEMPLATE.md"
+echo "Utilities: ~/ai_memory/memory_utils.py"
+

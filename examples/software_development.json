@@ -47,3 +47,4 @@
     "monitoring": "CloudWatch for infrastructure, Sentry for application errors"
   }
 }
+

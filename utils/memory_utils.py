@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Claude Memory Management Utilities
+your AI agent Memory Management Utilities
 
 Provides tools for managing persistent memory data across sessions.
 """
@@ -11,7 +11,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, Any, List
 
-MEMORY_DIR = Path.home() / "claude_memory"
+MEMORY_DIR = Path.home() / "ai_memory"
 
 def update_active_memory(key: str, value: Any) -> None:
     """Update a key in active memory."""
@@ -127,6 +127,6 @@ def memory_summary() -> Dict[str, Any]:
     return summary
 
 if __name__ == "__main__":
-    print("Claude Memory System")
+    print("AI Agent Memory System")
     print("===================")
     print(json.dumps(memory_summary(), indent=2))

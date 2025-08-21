@@ -1,6 +1,6 @@
 # 🔒 Security Policy
 
-## 🛡️ **Supported Versions**
+## 🛡️ Supported Versions
 
 We actively provide security updates for the following versions:
 
@@ -9,35 +9,35 @@ We actively provide security updates for the following versions:
 | 1.0.x   | ✅ Full support    |
 | < 1.0   | ❌ Not supported   |
 
-## 🚨 **Reporting a Vulnerability**
+## 🚨 Reporting a Vulnerability
 
-### **Quick Response Process**
+### Quick Response Process
 
 We take security seriously. If you discover a security vulnerability, please help us protect our users:
 
-**🔥 For Critical Vulnerabilities (immediate risk)**
-- **Email**: [INSERT SECURITY EMAIL]
-- **Expected Response**: Within 4 hours
-- **Severity**: Data loss, remote code execution, privilege escalation
+🔥 For Critical Vulnerabilities (immediate risk)
+- Email: [INSERT SECURITY EMAIL]
+- Expected Response: Within 4 hours
+- Severity: Data loss, remote code execution, privilege escalation
 
-**⚠️ For High/Medium Vulnerabilities**
-- **Email**: [INSERT SECURITY EMAIL]  
-- **Expected Response**: Within 24 hours
-- **Severity**: Information disclosure, local privilege escalation
+⚠️ For High/Medium Vulnerabilities
+- Email: [INSERT SECURITY EMAIL]  
+- Expected Response: Within 24 hours
+- Severity: Information disclosure, local privilege escalation
 
-**📋 For Low Impact Issues**
-- **GitHub Issues**: [Create a private security advisory](https://github.com/trose/claude-memory-system/security/advisories/new)
-- **Expected Response**: Within 72 hours
+📋 For Low Impact Issues
+- GitHub Issues: [Create a private security advisory](https://github.com/trose/ai-agent-memory-system/security/advisories/new)
+- Expected Response: Within 72 hours
 
-### **What to Include in Your Report**
+### What to Include in Your Report
 
-1. **Clear Description**: What the vulnerability does
-2. **Reproduction Steps**: Detailed steps to reproduce
-3. **Impact Assessment**: What an attacker could achieve
-4. **Affected Versions**: Which versions are vulnerable
-5. **Proposed Fix**: If you have suggestions (optional)
+1. Clear Description: What the vulnerability does
+2. Reproduction Steps: Detailed steps to reproduce
+3. Impact Assessment: What an attacker could achieve
+4. Affected Versions: Which versions are vulnerable
+5. Proposed Fix: If you have suggestions (optional)
 
-**Example Report:**
+Example Report:
 ```
 Subject: [SECURITY] Path Traversal in memory_utils.py
 
@@ -55,43 +55,43 @@ Affected Versions: All versions <= 1.0.0
 Proposed Fix: Add path validation using os.path.realpath()
 ```
 
-## 🔍 **Security Considerations**
+## 🔍 Security Considerations
 
-### **File System Security**
+### File System Security
 
-**Current Protections:**
+Current Protections:
 - Memory files stored in user's home directory
 - No automatic execution of memory content
 - JSON parsing with safe defaults
 
-**User Responsibilities:**
-- Ensure `~/claude_memory/` has appropriate permissions
+User Responsibilities:
+- Ensure `~/ai_memory/` has appropriate permissions
 - Don't store sensitive credentials in memory files
 - Regularly review memory content for sensitive data
 
-**Best Practices:**
+Best Practices:
 ```bash
 # Set secure permissions
-chmod 700 ~/claude_memory
-chmod 600 ~/claude_memory/*.json
+chmod 700 ~/ai_memory
+chmod 600 ~/ai_memory/*.json
 
 # Exclude from backups if containing sensitive data
-echo "claude_memory/" >> ~/.gitignore_global
+echo "ai_memory/" >> ~/.gitignore_global
 ```
 
-### **Data Privacy**
+### Data Privacy
 
-**What We Don't Store:**
+What We Don't Store:
 - No telemetry or analytics data
 - No automatic uploads or syncing
 - No access to your memory files
 
-**What You Control:**
+What You Control:
 - All data stays on your local machine
 - You decide what to include in memory
 - You control backup and sharing
 
-**Sensitive Data Guidelines:**
+Sensitive Data Guidelines:
 ```json
 {
   "❌_avoid": {
@@ -107,43 +107,43 @@ echo "claude_memory/" >> ~/.gitignore_global
 }
 ```
 
-### **Input Validation**
+### Input Validation
 
-**Current Validations:**
+Current Validations:
 - JSON schema validation for memory files
 - File extension checks
 - Basic path sanitization
 
-**Planned Improvements (v1.1.0):**
+Planned Improvements (v1.1.0):
 - Comprehensive path validation
 - Memory file size limits
 - Content sanitization options
 
-## 🔧 **Security Features**
+## 🔧 Security Features
 
-### **File System Protection**
+### File System Protection
 - Memory files use `.json` extension only
 - No executable file creation
 - Directory creation limited to memory structure
 
-### **Input Sanitization**
+### Input Sanitization
 - JSON parsing with error handling
 - UTF-8 encoding enforcement
 - No eval() or exec() usage
 
-### **Error Handling**
+### Error Handling
 - Graceful degradation on permission errors
 - Safe failure modes
 - No sensitive information in error messages
 
-## 🏗️ **Secure Development Practices**
+## 🏗️ Secure Development Practices
 
-### **Code Review Requirements**
+### Code Review Requirements
 - All security-related changes require review
 - Input validation changes need extra scrutiny
 - File system operations reviewed for path traversal
 
-### **Testing Standards**
+### Testing Standards
 ```python
 def test_path_traversal_protection():
     """Ensure malicious paths are rejected."""
@@ -157,78 +157,79 @@ def test_path_traversal_protection():
             save_project_status({"path": path})
 ```
 
-### **Dependencies**
+### Dependencies
 - Minimal dependency footprint
 - Regular security audits of dependencies
 - Automated vulnerability scanning
 
-## 📋 **Security Checklist for Contributors**
+## 📋 Security Checklist for Contributors
 
-### **For All Contributions**
+### For All Contributions
 - [ ] No hardcoded secrets or credentials
 - [ ] Input validation for user-provided data
 - [ ] Error messages don't leak sensitive information
 - [ ] File operations use safe path handling
 
-### **For File System Operations**
+### For File System Operations
 - [ ] Path validation prevents directory traversal
 - [ ] File permissions are appropriately restrictive
 - [ ] No execution of user-provided content
 - [ ] Safe handling of large files
 
-### **For Memory Operations**
+### For Memory Operations
 - [ ] JSON parsing handles malformed input
 - [ ] Memory size limits are enforced
 - [ ] No arbitrary code execution
 - [ ] Safe serialization/deserialization
 
-## 🎯 **Threat Model**
+## 🎯 Threat Model
 
-### **In Scope**
-- **File System Attacks**: Path traversal, arbitrary file write
-- **Data Injection**: Malicious JSON content, code injection
-- **Information Disclosure**: Sensitive data exposure
-- **Denial of Service**: Resource exhaustion, large files
+### In Scope
+- File System Attacks: Path traversal, arbitrary file write
+- Data Injection: Malicious JSON content, code injection
+- Information Disclosure: Sensitive data exposure
+- Denial of Service: Resource exhaustion, large files
 
-### **Out of Scope**
-- **Social Engineering**: User education responsibility
-- **Physical Access**: Local machine compromise
-- **Network Attacks**: No network functionality
-- **OS-Level Exploits**: Operating system vulnerabilities
+### Out of Scope
+- Social Engineering: User education responsibility
+- Physical Access: Local machine compromise
+- Network Attacks: No network functionality
+- OS-Level Exploits: Operating system vulnerabilities
 
-### **Assumptions**
+### Assumptions
 - User has legitimate access to their machine
 - File system permissions work correctly
 - Python interpreter is trusted
 - Memory directory is not shared with untrusted users
 
-## 🔄 **Security Update Process**
+## 🔄 Security Update Process
 
-### **For Security Releases**
-1. **Investigation**: Reproduce and assess impact
-2. **Fix Development**: Create minimal, targeted fix
-3. **Testing**: Comprehensive security testing
-4. **Disclosure**: Coordinate with reporter
-5. **Release**: Security patch with advisory
-6. **Communication**: Notify users of update
+### For Security Releases
+1. Investigation: Reproduce and assess impact
+2. Fix Development: Create minimal, targeted fix
+3. Testing: Comprehensive security testing
+4. Disclosure: Coordinate with reporter
+5. Release: Security patch with advisory
+6. Communication: Notify users of update
 
-### **Release Timeline**
-- **Critical**: 24-48 hours
-- **High**: 1 week
-- **Medium/Low**: Next regular release
+### Release Timeline
+- Critical: 24-48 hours
+- High: 1 week
+- Medium/Low: Next regular release
 
-## 📞 **Contact Information**
+## 📞 Contact Information
 
-- **Security Email**: [INSERT SECURITY EMAIL]
-- **PGP Key**: [INSERT PGP KEY ID] (for sensitive reports)
-- **Response Time**: See severity levels above
+- Security Email: [INSERT SECURITY EMAIL]
+- PGP Key: [INSERT PGP KEY ID] (for sensitive reports)
+- Response Time: See severity levels above
 
-## 🙏 **Acknowledgments**
+## 🙏 Acknowledgments
 
-We appreciate security researchers who help make Claude Memory System safer:
+We appreciate security researchers who help make AI Agent Memory System safer:
 
 <!-- Security contributors will be listed here -->
 
 ---
 
-**Remember: Security is a shared responsibility. Help us keep the community safe!** 🛡️
+Remember: Security is a shared responsibility. Help us keep the community safe! 🛡️
+

@@ -274,3 +274,4 @@ class TestMemoryUtilsIntegration:
         
         insights = memory_utils.get_session_insights("concurrent")
         assert len(insights["concurrent"]) == 10
+

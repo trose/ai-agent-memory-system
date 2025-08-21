@@ -1,0 +1,98 @@
+name: ❓ Question
+description: Ask a question about usage, setup, or best practices
+title: "[Question]: "
+labels: ["question", "needs-response"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your question! 🤔
+        
+        Please check the documentation first:
+        - [Complete Guide](../../docs/COMPLETE_GUIDE.md)
+        - [Quick Start](../../docs/QUICK_START_TEMPLATE.md)
+        - [Use Cases](../../docs/USE_CASES.md)
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: 🏷️ Question Category
+      description: What type of question is this?
+      options:
+        - Setup & Installation
+        - Usage & Best Practices
+        - Advanced Features (ORC Analytics)
+        - Integration & Workflows
+        - Performance & Optimization
+        - Troubleshooting
+        - Project-Specific Use Cases
+        - Contributing & Development
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: ❓ Your Question
+      description: What would you like to know?
+      placeholder: "I'm trying to understand how to..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: 🎯 Context & Background
+      description: What are you trying to accomplish? What's your use case?
+      placeholder: |
+        I'm working on a project that...
+        My goal is to...
+        I've tried...
+
+  - type: textarea
+    id: attempted
+    attributes:
+      label: 🔍 What You've Tried
+      description: What have you already attempted or researched?
+      placeholder: |
+        I've read...
+        I tried...
+        I looked at...
+
+  - type: input
+    id: setup
+    attributes:
+      label: 🛠️ Current Setup
+      description: Are you using the basic setup or have you customized it?
+      placeholder: "Basic setup / Custom with X modifications / Haven't set up yet"
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: 💻 Environment (if relevant)
+      description: Technical details if this is a technical question
+      placeholder: |
+        - OS: macOS/Linux/Windows
+        - Python version: 3.x
+        - Project type: web dev/research/etc.
+
+  - type: checkboxes
+    id: documentation
+    attributes:
+      label: 📚 Documentation Check
+      description: Have you checked the existing documentation?
+      options:
+        - label: I've read the README
+        - label: I've checked the Complete Guide
+        - label: I've looked at relevant examples
+        - label: I've searched existing issues
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 📝 Additional Details
+      description: Any other information that might help us answer your question
+      placeholder: Any additional context, examples, or specific scenarios...

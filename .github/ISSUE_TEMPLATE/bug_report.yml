@@ -1,0 +1,139 @@
+name: 🐛 Bug Report
+description: File a bug report to help us improve
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report! 🙏
+        
+        Before submitting, please search existing issues to avoid duplicates.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 🐛 Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: Describe what happened vs what you expected...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 🔄 Steps to Reproduce
+      description: Steps to reproduce the behavior
+      placeholder: |
+        1. Set up memory system with...
+        2. Run command...
+        3. See error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: ✅ Expected Behavior
+      description: What should have happened?
+      placeholder: Describe the expected outcome...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: ❌ Actual Behavior
+      description: What actually happened?
+      placeholder: Describe what actually occurred...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: 🎯 Component
+      description: Which part of the system is affected?
+      options:
+        - Memory Utilities (memory_utils.py)
+        - Setup Script (setup.sh)
+        - Templates (JSON templates)
+        - Documentation
+        - Examples
+        - ORC Analytics
+        - File I/O Operations
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: python_version
+    attributes:
+      label: 🐍 Python Version
+      description: What version of Python are you running?
+      placeholder: "3.9.7"
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: 💻 Operating System
+      description: What OS are you using?
+      placeholder: "macOS 12.3, Ubuntu 20.04, Windows 11"
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: 🌍 Environment Details
+      description: Any additional environment information
+      placeholder: |
+        - Shell: zsh/bash/fish
+        - Terminal: iTerm2/Terminal/VS Code
+        - Virtual environment: venv/conda/poetry
+        - Any special setup details...
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 📋 Error Logs/Output
+      description: Include any error messages, stack traces, or relevant output
+      placeholder: Paste error logs here...
+      render: text
+
+  - type: textarea
+    id: memory_state
+    attributes:
+      label: 🧠 Memory System State
+      description: What's the current state of your memory system?
+      placeholder: |
+        - Memory directory exists: Yes/No
+        - Active memory file size: X KB
+        - Recent operations: setup/update/query
+        - Any custom modifications...
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: ✅ Pre-submission Checklist
+      description: Please confirm you've completed these steps
+      options:
+        - label: I searched existing issues for duplicates
+          required: true
+        - label: I can reproduce this issue consistently
+          required: true
+        - label: I've included all relevant information above
+          required: true
+        - label: This is a bug report, not a feature request or question
+          required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 📝 Additional Context
+      description: Add any other context, screenshots, or files that might help
+      placeholder: Any additional information that might be helpful...

@@ -1,0 +1,331 @@
+name: 🧪 CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+  schedule:
+    # Run tests weekly to catch dependency issues
+    - cron: '0 6 * * 1'
+
+env:
+  PYTHON_VERSION: '3.9'
+  
+jobs:
+  test:
+    name: 🧪 Test Suite
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ['3.8', '3.9', '3.10', '3.11']
+        
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 🐍 Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+        
+    - name: 📦 Cache Dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+          
+    - name: 🔧 Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-dev.txt
+        
+    - name: 🧪 Run Unit Tests
+      run: |
+        pytest tests/unit/ -v --cov=utils --cov-report=xml --cov-report=term
+        
+    - name: 🔗 Run Integration Tests
+      run: |
+        pytest tests/integration/ -v
+        
+    - name: ⚡ Run Performance Tests
+      run: |
+        pytest tests/performance/ -v --benchmark-only
+      continue-on-error: true  # Performance tests shouldn't fail the build
+      
+    - name: 📊 Upload Coverage to Codecov
+      if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.9'
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+
+  lint:
+    name: 🔍 Code Quality
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        
+    - name: 📦 Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-dev.txt
+        
+    - name: 🎨 Check Code Formatting (Black)
+      run: |
+        black --check --diff utils/ tests/
+        
+    - name: 🔍 Lint with Flake8
+      run: |
+        flake8 utils/ tests/ --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 utils/ tests/ --count --exit-zero --max-complexity=10 --max-line-length=88 --statistics
+        
+    - name: 📋 Import Sorting (isort)
+      run: |
+        isort --check-only --diff utils/ tests/
+        
+    - name: 🔬 Type Checking (MyPy)
+      run: |
+        mypy utils/ --ignore-missing-imports
+      continue-on-error: true  # Type checking shouldn't fail the build initially
+
+  security:
+    name: 🔒 Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        
+    - name: 📦 Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install safety bandit
+        
+    - name: 🔒 Security Audit (Safety)
+      run: |
+        safety check --json
+      continue-on-error: true
+        
+    - name: 🕵️ Security Linting (Bandit)
+      run: |
+        bandit -r utils/ -f json
+      continue-on-error: true
+
+  documentation:
+    name: 📚 Documentation Check
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        
+    - name: 📦 Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-dev.txt
+        
+    - name: 📖 Check Documentation Links
+      run: |
+        # Check that all internal links work
+        python -c "
+        import os
+        import re
+        
+        def check_markdown_links():
+            issues = []
+            for root, dirs, files in os.walk('.'):
+                for file in files:
+                    if file.endswith('.md'):
+                        filepath = os.path.join(root, file)
+                        with open(filepath, 'r') as f:
+                            content = f.read()
+                        
+                        # Find internal links [text](path)
+                        links = re.findall(r'\[.*?\]\(([^)]*)\)', content)
+                        for link in links:
+                            if not link.startswith('http') and not link.startswith('#'):
+                                if not os.path.exists(link) and not os.path.exists(os.path.join(root, link)):
+                                    issues.append(f'{filepath}: broken link {link}')
+            
+            if issues:
+                print('\\n'.join(issues))
+                exit(1)
+            else:
+                print('All documentation links are valid!')
+        
+        check_markdown_links()
+        "
+        
+    - name: 📋 Validate JSON Templates
+      run: |
+        python -c "
+        import json
+        import os
+        
+        def validate_json_files():
+            for root, dirs, files in os.walk('.'):
+                for file in files:
+                    if file.endswith('.json'):
+                        filepath = os.path.join(root, file)
+                        try:
+                            with open(filepath, 'r') as f:
+                                json.load(f)
+                            print(f'✅ {filepath}')
+                        except json.JSONDecodeError as e:
+                            print(f'❌ {filepath}: {e}')
+                            exit(1)
+            print('All JSON files are valid!')
+        
+        validate_json_files()
+        "
+
+  setup-test:
+    name: 🚀 Setup Script Test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]  # Windows uses different shell
+    
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 🔧 Test Setup Script
+      run: |
+        # Create temporary home directory
+        mkdir -p /tmp/test_home
+        export HOME=/tmp/test_home
+        
+        # Run setup script
+        bash setup.sh
+        
+        # Verify setup worked
+        test -d "$HOME/claude_memory"
+        test -f "$HOME/claude_memory/active_memory.json"
+        test -f "$HOME/claude_memory/memory_utils.py"
+        test -d "$HOME/claude_memory/project_memory"
+        test -d "$HOME/claude_memory/learning_memory"
+        test -d "$HOME/claude_memory/session_logs"
+        test -d "$HOME/claude_memory/orc_data"
+        
+        echo "✅ Setup script test passed!"
+
+  performance:
+    name: ⚡ Performance Benchmarks
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        
+    - name: 📦 Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-dev.txt
+        
+    - name: ⚡ Run Performance Benchmarks
+      run: |
+        pytest tests/performance/ --benchmark-json=benchmark.json
+        
+    - name: 📊 Store Benchmark Results
+      uses: benchmark-action/github-action-benchmark@v1
+      with:
+        tool: 'pytest'
+        output-file-path: benchmark.json
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        auto-push: true
+        comment-on-alert: true
+        alert-threshold: '200%'
+        fail-on-alert: false
+
+  release-check:
+    name: 🏷️ Release Readiness
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && (contains(github.ref, 'release') || contains(github.ref, 'main'))
+    
+    steps:
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v4
+      
+    - name: 📋 Check Release Requirements
+      run: |
+        # Check that all required files exist
+        files=(
+          "README.md"
+          "CHANGELOG.md" 
+          "LICENSE"
+          "CONTRIBUTING.md"
+          "CODE_OF_CONDUCT.md"
+          "SECURITY.md"
+          "setup.sh"
+        )
+        
+        for file in "${files[@]}"; do
+          if [[ ! -f "$file" ]]; then
+            echo "❌ Missing required file: $file"
+            exit 1
+          else
+            echo "✅ Found: $file"
+          fi
+        done
+        
+        # Check that setup script is executable
+        if [[ ! -x "setup.sh" ]]; then
+          echo "❌ setup.sh is not executable"
+          exit 1
+        fi
+        
+        echo "🎉 All release requirements met!"
+
+  notify:
+    name: 📢 Notification
+    runs-on: ubuntu-latest
+    needs: [test, lint, security, documentation, setup-test]
+    if: always()
+    
+    steps:
+    - name: 📊 Summarize Results
+      run: |
+        echo "## 🧪 CI/CD Results Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "- **Tests**: ${{ needs.test.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Code Quality**: ${{ needs.lint.result }}" >> $GITHUB_STEP_SUMMARY  
+        echo "- **Security**: ${{ needs.security.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Documentation**: ${{ needs.documentation.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Setup Test**: ${{ needs.setup-test.result }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        if [[ "${{ needs.test.result }}" == "success" && "${{ needs.lint.result }}" == "success" ]]; then
+          echo "🎉 **All core checks passed!**" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "⚠️ **Some checks failed - please review**" >> $GITHUB_STEP_SUMMARY
+        fi

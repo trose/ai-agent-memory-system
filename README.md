@@ -1,5 +1,14 @@
 # 🧠 Claude Persistent Memory System
 
+[![GitHub release](https://img.shields.io/github/release/trose/claude-memory-system.svg)](https://github.com/trose/claude-memory-system/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Tests](https://github.com/trose/claude-memory-system/workflows/🧪%20CI/CD%20Pipeline/badge.svg)](https://github.com/trose/claude-memory-system/actions)
+[![Coverage](https://codecov.io/gh/trose/claude-memory-system/branch/main/graph/badge.svg)](https://codecov.io/gh/trose/claude-memory-system)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Security: bandit](https://img.shields.io/badge/security-bandit-green.svg)](https://github.com/PyCQA/bandit)
+[![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/trose/claude-memory-system/blob/main/CONTRIBUTING.md)
+
 **Transform your AI collaboration with persistent memory across sessions**
 
 ## 🌟 **What This Solves**
@@ -92,6 +101,12 @@ git clone https://github.com/trose/claude-memory-system.git
 cd claude-memory-system
 ./setup.sh
 ```
+
+### **Interactive Demo**
+```bash
+python demo.py
+```
+Experience the full system with a guided, interactive demonstration!
 
 ### **With Analytics Support**
 ```bash

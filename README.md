@@ -29,6 +29,7 @@ A persistent memory system for AI agents to maintain context across sessions.
 - [Features](#features)
 - [Documentation](#documentation)
 - [Use Cases](#use-cases)
+- [Memory Types](#memory-types)
 - [Similar Solutions & Comparisons](#similar-solutions--comparisons)
 - [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
@@ -85,15 +86,17 @@ Your AI agent will handle the technical setup and start using memory immediately
 ├── active_memory.json              # Current session context
 ├── project_memory/                 # Project-specific details
 ├── learning_memory/                # Patterns and insights
-└── session_logs/                   # Important milestones
+├── session_logs/                   # Important milestones
+└── orc_data/                       # Performance & analytical data (ORC format)
 ```
 
 ## Features
 
-- Human-readable storage - JSON files you can edit
-- Multi-project support - Separate contexts per project
-- Pattern learning - Remembers what works
-- Session continuity - Build on previous work
+- **Human-readable storage** - JSON files you can edit
+- **Multi-project support** - Separate contexts per project
+- **Pattern learning** - Remembers what works
+- **Session continuity** - Build on previous work
+- **Analytical memory** - ORC format for performance data and large datasets
 
 ## Documentation
 
@@ -107,6 +110,36 @@ Your AI agent will handle the technical setup and start using memory immediately
 - Content Creation - Consistent style and progress tracking
 - Business Strategy - Decision history and context
 - Learning - Track progress and effective patterns
+
+## Memory Types
+
+### JSON Memory (Default)
+Use for regular context, preferences, and project information:
+- `active_memory.json` - Current session state
+- `project_memory/*.json` - Project-specific context
+- `learning_memory/*.json` - Insights and patterns
+
+### ORC Analytical Memory
+Use for performance data, metrics, and large datasets:
+```python
+# Example: Store performance benchmarks
+memory_utils.create_orc_data([
+    {"timestamp": "2024-08-21", "response_time": 1.2, "accuracy": 0.95},
+    {"timestamp": "2024-08-22", "response_time": 0.8, "accuracy": 0.97}
+], "performance_metrics")
+```
+
+**When to use ORC:**
+- Performance tracking and benchmarks
+- Large datasets (>1000 entries)
+- Time-series data analysis
+- Any data you'll query/analyze later
+
+**Benefits:**
+- Efficient storage for large datasets
+- Fast analytical queries
+- Automatic compression
+- Falls back to JSON if PyArrow unavailable
 
 ## Similar Solutions & Comparisons
 

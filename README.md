@@ -197,6 +197,76 @@ LlamaIndex:    ▓▓▓▓▓ (Index lookup)
 - Working with very large document collections
 - Need sophisticated RAG pipelines
 
+## Troubleshooting
+
+### AI Agent Not Detecting Memory Directory
+
+If your AI agent isn't automatically using the memory system:
+
+#### 🔍 **Quick Checks**
+```bash
+# 1. Verify memory directory exists
+ls ~/ai_memory/
+
+# 2. Check if active memory file is present
+ls ~/ai_memory/active_memory.json
+
+# 3. Verify directory structure
+tree ~/ai_memory/  # or: find ~/ai_memory/ -type f
+```
+
+#### 💬 **Helpful Prompts to Try**
+
+**For First-Time Setup:**
+```
+"Please check if there's an AI memory system at ~/ai_memory/ and use it. If it doesn't exist, set up the AI Agent Memory System from https://github.com/trose/ai-agent-memory-system to remember our work across sessions."
+```
+
+**For Existing Memory:**
+```
+"I have an AI memory system at ~/ai_memory/ that contains our project context and previous conversations. Please load and use this memory to maintain continuity from our past sessions."
+```
+
+**For Session Handoffs:**
+```
+"This project uses persistent AI memory stored at ~/ai_memory/. Please read the active_memory.json and project files to understand our current context before proceeding."
+```
+
+#### 🛠️ **Manual Memory Setup**
+If auto-detection fails, you can manually guide the agent:
+
+```bash
+# Show the agent what's available
+cat ~/ai_memory/active_memory.json
+cat ~/ai_memory/project_memory/*.json
+
+# Or have the agent explore
+ls -la ~/ai_memory/
+find ~/ai_memory/ -name "*.json" -exec head -5 {} \;
+```
+
+#### 🔧 **Environment Variable Override**
+For custom memory locations:
+```bash
+export AI_MEMORY_DIR="/path/to/custom/memory"
+# Then tell your agent about the custom location
+```
+
+#### 📋 **Common Issues**
+
+| Problem | Solution |
+|---------|----------|
+| "Memory directory not found" | Run the Quick Start setup commands |
+| "Permission denied" | Check file permissions: `chmod -R 755 ~/ai_memory/` |
+| "Agent ignores memory" | Use explicit prompts from above |
+| "Corrupted JSON files" | Validate with: `python -m json.tool ~/ai_memory/active_memory.json` |
+| "Multiple agents conflict" | Each agent should update `last_updated` timestamp |
+
+#### 🎯 **Pro Tips**
+- **Start sessions** with memory awareness: "Continue from where we left off using ~/ai_memory/"
+- **End sessions** with memory updates: "Please update the memory system with today's progress"
+- **Switch agents** with context transfer: "Load our shared memory from ~/ai_memory/ to understand the project"
+
 ## Contributing
 
 Contributions welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.

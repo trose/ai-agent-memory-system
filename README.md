@@ -154,6 +154,7 @@ The AI memory space has several notable solutions. Here's how our system compare
 | **LangChain Memory** | Chain-based | Various backends | Framework integration | LangChain applications | ~90k |
 | **Cognee** | Graph + Vector DB | Hybrid storage | Relationship discovery | Complex data connections | ~1.5k |
 | **LlamaIndex** | Document-focused | Vector indexes | Large document retrieval | RAG applications | ~34k |
+| **Single File Approach** | One JSON/MD file | File system | Ultimate simplicity | Quick prototypes, simple agents | N/A |
 
 ### Performance Comparison
 
@@ -166,6 +167,7 @@ The AI memory space has several notable solutions. Here's how our system compare
 | **Human Readable** | ✅ Yes | ❌ No | ❌ No | ❌ No | ❌ No |
 | **Editable** | ✅ Yes | ❌ No | ❌ No | ❌ No | ❌ No |
 | **Local First** | ✅ Yes | ✅ Yes | ⚠️ Optional | ⚠️ Optional | ⚠️ Optional |
+| **Single File** | Instant | Perfect | Tiny | Instant | Perfect | ✅ Yes |
 
 ### Performance Visualization
 

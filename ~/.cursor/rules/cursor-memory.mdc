@@ -1,18 +1,18 @@
-# Claude Memory System
+# Cursor Memory System
 
 ## Memory Location
-Claude's persistent memory is stored at `~/claude_memory/`
+Cursor's persistent memory is stored at `~/cursor_memory/`
 
 ## Required Memory Check
 Before starting any work, Claude should:
 
-1. **Check active memory**: Read `~/claude_memory/active_memory.json` for:
+1. **Check active memory**: Read `~/cursor_memory/active_memory.json` for:
    - Current project context
    - User preferences and communication style
    - Recent accomplishments and decisions
    - Next priorities
 
-2. **Check session logs**: Review `~/claude_memory/session_logs/` for:
+2. **Check session logs**: Review `~/cursor_memory/session_logs/` for:
    - Previous session summaries
    - User interaction patterns
    - Technical decisions made
@@ -20,8 +20,8 @@ Before starting any work, Claude should:
 
 ## Memory Update Protocol
 After completing significant work, Claude should:
-- Update `~/claude_memory/active_memory.json` with new context
-- Create session log entries in `~/claude_memory/session_logs/` with date stamps
+- Update `~/cursor_memory/active_memory.json` with new context
+- Create session log entries in `~/cursor_memory/session_logs/` with date stamps
 - Preserve user preferences and communication patterns
 
 ## Benefits
@@ -29,3 +29,4 @@ After completing significant work, Claude should:
 - Maintains context across fresh chat sessions
 - Understands user's preferred workflow and communication style
 - Enables efficient continuation of ongoing projects
+

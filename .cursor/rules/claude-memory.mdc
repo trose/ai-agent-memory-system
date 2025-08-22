@@ -1,0 +1,31 @@
+# Claude Memory System
+
+## Memory Location
+Claude's persistent memory is stored at `~/claude_memory/`
+
+## Required Memory Check
+Before starting any work, Claude should:
+
+1. **Check active memory**: Read `~/claude_memory/active_memory.json` for:
+   - Current project context
+   - User preferences and communication style
+   - Recent accomplishments and decisions
+   - Next priorities
+
+2. **Check session logs**: Review `~/claude_memory/session_logs/` for:
+   - Previous session summaries
+   - User interaction patterns
+   - Technical decisions made
+   - Project evolution context
+
+## Memory Update Protocol
+After completing significant work, Claude should:
+- Update `~/claude_memory/active_memory.json` with new context
+- Create session log entries in `~/claude_memory/session_logs/` with date stamps
+- Preserve user preferences and communication patterns
+
+## Benefits
+- Avoids re-analyzing long chat histories
+- Maintains context across fresh chat sessions
+- Understands user's preferred workflow and communication style
+- Enables efficient continuation of ongoing projects
